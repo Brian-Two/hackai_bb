@@ -32,8 +32,8 @@ async function transcribeAudio(filePath) {
 }
 
 // Example usage
-// const audioFilePath = '/Users/adrianng/Downloads/test.wav'; //* Replace with your audio file path
-const audioFilePath = '/Users/adrianng/Downloads/recording.webm';
+process.env.GOOGLE_APPLICATION_CREDENTIALS = "/Users/adrianng/Desktop/bisonbytes2025v2/test3 original/hackai_bb/august-monument-454521-p9-fb1a43aab8ff.json"; //* Replace with GCloud API file path
+const audioFilePath = '/Users/adrianng/Downloads/delete.webm'; //* Replace with your audio file path
 transcribeAudio(audioFilePath)
     .then(transcription => {
         console.log('Transcription:', transcription);

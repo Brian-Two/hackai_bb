@@ -7,12 +7,15 @@
 </head>
 <body>
     <h1>Find Songs by Mood</h1>
-    <button onclick="startRecording()">Start Recording</button>
-        <button onclick="stopRecording()" disabled>Stop Recording</button>
+    <button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
+    <button id="stopRecordingButton" onclick="stopRecording()" disabled>Stop Recording</button>
     <h2>Recognized Mood: <span id="recognizedMood">None</span></h2>
     <h3>Recommended Songs:</h3>
     <ul id="songList"></ul>
 
-    <script src="app.js"></script>
+    <h2>Transcription:</h2>
+    <div id="transcription"></div>
+
+    <script src="combined.js"></script>
 </body>
 </html>

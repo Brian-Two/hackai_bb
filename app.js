@@ -10,8 +10,14 @@ async function startRecording() {
     };
     mediaRecorder.onstop = () => {
         const audioBlob = new Blob(audioChunks, { type: 'audio/webm;codecs=opus' });
-        // Send audio data to server for transcription
-        sendAudioToServer(audioBlob);
+        const audioURL = URL.createObjectURL(audioBlob);
+        const downloadLink = document.createElement('a');
+        downloadLink.href = audioURL;
+        downloadLink.download = 'recording.webm';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        URL.revokeObjectURL(audioURL);
         audioChunks = [];
     };
 
