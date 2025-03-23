@@ -1,70 +1,94 @@
-# Getting Started with Create React App
+# Mood Music App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React application that uses speech recognition to have a conversation with users, analyze their mood, and recommend appropriate music through Spotify or YouTube Music.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Voice-based interaction using Web Speech API
+- Mood analysis based on conversation
+- Integration with Spotify API for music recommendations and playback
+- YouTube Music fallback when Spotify is unavailable
+- OAuth authentication for Spotify
+- Error handling and service switching
+- Responsive UI with playback controls
 
-### `npm start`
+## Project Structure
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```
+mood-music-app/
+├── node_modules/
+├── public/
+│   ├── favicon.ico
+│   ├── index.html
+│   └── manifest.json
+├── src/
+│   ├── App.js (Router setup)
+│   ├── MoodMusicApp.jsx (Main application)
+│   ├── components/
+│   │   └── SpotifyCallback.jsx (OAuth callback handler)
+│   ├── services/
+│   │   ├── MusicServiceInterface.js (Abstract class for music services)
+│   │   ├── MusicServiceFactory.js (Factory for creating service instances)
+│   │   ├── SpotifyService.js (Spotify API integration)
+│   │   └── YouTubeMusicService.js (YouTube Music integration)
+│   ├── utils/
+│   │   ├── AuthHandler.js (Authentication helper)
+│   │   ├── ErrorHandler.js (Error handling utilities)
+│   │   └── MoodAnalyzer.js (Text-based mood analysis)
+│   ├── index.js
+│   └── index.css
+├── .env (Environment variables - not in repo)
+├── .env.example (Example environment variables)
+├── package.json
+└── README.md
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Setup
 
-### `npm test`
+1. Clone the repository
+2. Install dependencies:
+   ```
+   npm install
+   ```
+3. Create a `.env` file based on `.env.example` and add your API credentials:
+   ```
+   # Spotify API Credentials
+   REACT_APP_SPOTIFY_CLIENT_ID=your_spotify_client_id
+   REACT_APP_SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+   REACT_APP_SPOTIFY_REDIRECT_URI=http://localhost:3000/callback
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   # YouTube API Key
+   REACT_APP_YOUTUBE_API_KEY=your_youtube_api_key
+   ```
 
-### `npm run build`
+4. Start the development server:
+   ```
+   npm start
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## API Credentials
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Spotify API
+1. Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/)
+2. Create a new application
+3. Set the redirect URI to `http://localhost:3000/callback`
+4. Copy your Client ID and Client Secret to the `.env` file
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### YouTube API
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project
+3. Enable the YouTube Data API v3
+4. Create an API Key
+5. Copy the API Key to the `.env` file
 
-### `npm run eject`
+## Usage
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Click "Start Conversation" to begin
+2. Speak to the app about how you're feeling
+3. End the conversation when you're ready
+4. The app will analyze your mood and recommend songs
+5. Play the songs directly in the app
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## License
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+MIT
