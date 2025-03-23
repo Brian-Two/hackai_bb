@@ -26,7 +26,7 @@ function getSongsByMood() {
   const moodInput = document.getElementById('mood').value.toLowerCase(); // Get the user's input and convert to lowercase
   const songList = document.getElementById('songList');
   
-  // Clear any previous results
+  // Clear any previous results, this will have to be changed to reflect how the program reads input (file, etc)
   songList.innerHTML = '';
   
   // Check if the mood exists in the songsByMood object
