@@ -1,10 +1,11 @@
 // MoodMusicApp.jsx
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import MusicServiceFactory from './services/MusicServiceFactory';
 import AuthHandler from './utils/AuthHandler';
 import ErrorHandler from './utils/ErrorHandler';
 import MoodAnalyzer from './utils/MoodAnalyzer';
 import ConversationEngine from './utils/ConversationEngine';
+import BackgroundManager from './components/BackgroundManager';
 
 const MoodMusicApp = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -20,11 +21,23 @@ const MoodMusicApp = () => {
     currentService: null
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [currentMood, setCurrentMood] = useState('neutral');
   
   const speechRecognitionRef = useRef(null);
   const speechSynthesisRef = useRef(null);
   const lastProcessedTranscriptRef = useRef("");
   const musicServiceRef = useRef(null);
+
+  // Update currentMood when we detect a mood from conversation
+  useEffect(() => {
+    if (transcript.length > 1) {
+      // Use the MoodAnalyzer to continually assess mood throughout conversation
+      const moodAnalysis = MoodAnalyzer.analyzeMood(transcript);
+      if (moodAnalysis.mood && moodAnalysis.confidence > 0.4) {
+        setCurrentMood(moodAnalysis.mood);
+      }
+    }
+  }, [transcript]);
 
   // Check authentication status on component mount
   useEffect(() => {
@@ -47,6 +60,21 @@ const MoodMusicApp = () => {
 
     checkAuth();
   }, []);
+
+  // Generate AI response using the advanced conversation engine
+  const generateAIResponse = useCallback((userInput) => {
+    // Process the input through the ConversationEngine
+    const engineResponse = ConversationEngine.processInput(userInput, transcript);
+    
+    // Add AI response to transcript
+    setTranscript(prev => [...prev, {
+      speaker: "AI",
+      text: engineResponse.text
+    }]);
+    
+    // Speak the AI response
+    speakText(engineResponse.text);
+  }, [transcript]);
 
   // Initialize speech recognition
   useEffect(() => {
@@ -106,46 +134,7 @@ const MoodMusicApp = () => {
         };
       }
     }
-  }, [isProcessing]);
-
-  // Generate contextual AI response based on user input
-  const generateAIResponse = (userInput) => {
-    const userInputLower = userInput.toLowerCase();
-    
-    // Simple contextual responses
-    let response = '';
-    
-    if (userInputLower.includes('hello') || userInputLower.includes('hi')) {
-      response = "Hello! How are you feeling today?";
-    } else if (userInputLower.includes('how are you')) {
-      response = "I'm here to help you find music that matches your mood. How are you feeling?";
-    } else if (userInputLower.includes('thank')) {
-      response = "You're welcome! Is there anything specific about your mood you'd like to share?";
-    } else if (userInputLower.includes('music') || userInputLower.includes('song')) {
-      response = "I'll help you find the perfect songs based on how you're feeling. Can you tell me more about your mood?";
-    } else if (userInputLower.includes('feeling')) {
-      response = "It helps to hear how you're feeling. What kind of music typically helps when you feel this way?";
-    } else {
-      // Default responses if no context match
-      const aiResponses = [
-        "How are you feeling today?",
-        "Tell me more about your day.",
-        "What kind of music do you usually enjoy?",
-        "Do any particular songs or artists help when you feel this way?",
-        "I notice you mentioned that. How long have you been feeling this way?"
-      ];
-      response = aiResponses[Math.floor(Math.random() * aiResponses.length)];
-    }
-    
-    // Add AI response to transcript
-    setTranscript(prev => [...prev, {
-      speaker: "AI",
-      text: response
-    }]);
-    
-    // Speak the AI response
-    speakText(response);
-  };
+  }, [isProcessing, generateAIResponse]);
 
   // Function to speak text using Speech Synthesis
   const speakText = (text) => {
@@ -180,6 +169,7 @@ const MoodMusicApp = () => {
     setSongRecommendations([]);
     setCurrentlyPlaying(null);
     setError(null);
+    setCurrentMood('neutral'); // Reset to neutral mood for new conversation
     lastProcessedTranscriptRef.current = "";
     
     // Stop any currently playing audio if using the built-in audio player
@@ -285,6 +275,9 @@ const MoodMusicApp = () => {
       // Use the enhanced mood analyzer for a final analysis
       const moodAnalysis = MoodAnalyzer.analyzeMood(transcript);
       const mood = moodAnalysis.mood;
+      
+      // Update the current mood for background purposes
+      setCurrentMood(mood);
       
       // Get recommendations from music service based on mood
       if (!musicServiceRef.current) {
@@ -461,21 +454,26 @@ const MoodMusicApp = () => {
       alignItems: 'center',
       justifyContent: 'center',
       minHeight: '100vh',
-      backgroundColor: '#f3f4f6',
       padding: '1rem'
     }}>
+      {/* Background Manager */}
+      <BackgroundManager 
+        mood={currentMood || 'neutral'} 
+        apiKey={process.env.REACT_APP_YOUTUBE_API_KEY} 
+      />
+      
       <div style={{
         width: '100%',
         maxWidth: '500px',
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
         borderRadius: '0.5rem',
-        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
         overflow: 'hidden'
       }}>
         <div style={{
           padding: '1.5rem',
-          backgroundColor: '#4f46e5',
-          color: 'white'
+          backgroundColor: 'rgba(79, 70, 229, 0.7)', // Semi-transparent purple
+          color: 'white',
+          borderRadius: '0.5rem 0.5rem 0 0'
         }}>
           <h1 style={{
             fontSize: '1.5rem',
@@ -486,11 +484,11 @@ const MoodMusicApp = () => {
           }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <span style={{ marginRight: '0.5rem' }}>🎵</span>
-              Mood Music Recommender
+              Find Your Vibe
             </div>
             <div style={{ 
               fontSize: '0.875rem', 
-              backgroundColor: authStatus.spotify ? '#10b981' : '#f59e0b',
+              backgroundColor: authStatus.spotify ? 'rgba(16, 185, 129, 0.8)' : 'rgba(245, 158, 11, 0.8)',
               padding: '0.25rem 0.5rem',
               borderRadius: '0.25rem'
             }}>
@@ -524,7 +522,7 @@ const MoodMusicApp = () => {
           {/* Error display */}
           {error && (
             <div style={{
-              backgroundColor: '#fee2e2',
+              backgroundColor: 'rgba(254, 226, 226, 0.9)',
               border: '1px solid #ef4444',
               borderRadius: '0.375rem',
               padding: '1rem',
@@ -555,7 +553,7 @@ const MoodMusicApp = () => {
                   onClick={error.fallbackAction}
                   style={{
                     marginTop: '0.5rem',
-                    backgroundColor: '#4f46e5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.9)',
                     color: 'white',
                     border: 'none',
                     padding: '0.5rem 1rem',
@@ -579,7 +577,7 @@ const MoodMusicApp = () => {
                 onClick={startRecording}
                 disabled={isLoading}
                 style={{
-                  backgroundColor: '#4f46e5',
+                  backgroundColor: 'rgba(79, 70, 229, 0.9)',
                   color: 'white',
                   fontWeight: 'bold',
                   padding: '1rem 1.5rem',
@@ -599,7 +597,7 @@ const MoodMusicApp = () => {
                 onClick={stopRecording}
                 disabled={isLoading}
                 style={{
-                  backgroundColor: '#dc2626',
+                  backgroundColor: 'rgba(220, 38, 38, 0.9)',
                   color: 'white',
                   fontWeight: 'bold',
                   padding: '1rem 1.5rem',
@@ -628,8 +626,8 @@ const MoodMusicApp = () => {
                 display: 'inline-block',
                 width: '1.5rem',
                 height: '1.5rem',
-                border: '3px solid #e5e7eb',
-                borderTopColor: '#4f46e5',
+                border: '3px solid rgba(255, 255, 255, 0.3)',
+                borderTopColor: 'white',
                 borderRadius: '50%',
                 animation: 'spin 1s linear infinite'
               }} />
@@ -641,23 +639,25 @@ const MoodMusicApp = () => {
               <h2 style={{ 
                 fontSize: '1.125rem', 
                 fontWeight: '600', 
-                marginBottom: '0.5rem' 
+                marginBottom: '0.5rem',
+                color: 'white'
               }}>
                 Conversation Transcript
               </h2>
               <div style={{
-                backgroundColor: '#f9fafb',
+                backgroundColor: 'rgba(30, 41, 59, 0.7)',
                 borderRadius: '0.5rem',
                 padding: '1rem',
                 maxHeight: '16rem',
-                overflowY: 'auto'
+                overflowY: 'auto',
+                color: 'white' // Make text white for better contrast
               }}>
                 {transcript.map((item, index) => (
                   <div 
                     key={index} 
                     style={{
                       marginBottom: '0.5rem',
-                      color: item.speaker === "AI" ? '#4338ca' : '#1f2937'
+                      color: item.speaker === "AI" ? '#a5b4fc' : 'white' // Light purple for AI, white for user
                     }}
                   >
                     <span style={{ fontWeight: 'bold' }}>{item.speaker}: </span>
@@ -673,14 +673,16 @@ const MoodMusicApp = () => {
               <h2 style={{ 
                 fontSize: '1.125rem', 
                 fontWeight: '600', 
-                marginBottom: '0.5rem' 
+                marginBottom: '0.5rem',
+                color: 'white'
               }}>
                 Song Recommendations
               </h2>
               <div style={{
-                backgroundColor: '#eef2ff',
+                backgroundColor: 'rgba(30, 41, 59, 0.7)',
                 borderRadius: '0.5rem',
-                padding: '1rem'
+                padding: '1rem',
+                color: 'white' // Make text white for better contrast
               }}>
                 <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
                   {songRecommendations.map((song, index) => (
@@ -689,7 +691,7 @@ const MoodMusicApp = () => {
                       style={{
                         marginBottom: '0.5rem',
                         paddingBottom: '0.5rem',
-                        borderBottom: index !== songRecommendations.length - 1 ? '1px solid #e0e7ff' : 'none',
+                        borderBottom: index !== songRecommendations.length - 1 ? '1px solid rgba(255, 255, 255, 0.2)' : 'none',
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center'
@@ -710,8 +712,8 @@ const MoodMusicApp = () => {
                           />
                         )}
                         <div>
-                          <div style={{ fontWeight: '600' }}>{song.title}</div>
-                          <div style={{ fontSize: '0.875rem', color: '#4b5563' }}>by {song.artist}</div>
+                          <div style={{ fontWeight: '600', color: 'white' }}>{song.title}</div>
+                          <div style={{ fontSize: '0.875rem', color: '#d1d5db' }}>by {song.artist}</div>
                         </div>
                       </div>
                       <div>
@@ -720,7 +722,7 @@ const MoodMusicApp = () => {
                             onClick={stopSong}
                             disabled={isLoading}
                             style={{
-                              backgroundColor: '#dc2626',
+                              backgroundColor: 'rgba(220, 38, 38, 0.9)',
                               color: 'white',
                               border: 'none',
                               borderRadius: '9999px',
@@ -740,7 +742,7 @@ const MoodMusicApp = () => {
                             onClick={() => playSong(song)}
                             disabled={isLoading}
                             style={{
-                              backgroundColor: '#4f46e5',
+                              backgroundColor: 'rgba(79, 70, 229, 0.9)',
                               color: 'white',
                               border: 'none',
                               borderRadius: '9999px',
@@ -767,12 +769,13 @@ const MoodMusicApp = () => {
                 <div style={{ 
                   marginTop: '1rem',
                   padding: '0.75rem',
-                  backgroundColor: '#4f46e5',
+                  backgroundColor: 'rgba(79, 70, 229, 0.8)',
                   color: 'white',
                   borderRadius: '0.5rem',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'space-between'
+                  justifyContent: 'space-between',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     {currentlyPlaying.albumArt && (
@@ -824,6 +827,13 @@ const MoodMusicApp = () => {
         {`
           @keyframes spin {
             to { transform: rotate(360deg); }
+          }
+          
+          body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: transparent;
           }
         `}
       </style>
