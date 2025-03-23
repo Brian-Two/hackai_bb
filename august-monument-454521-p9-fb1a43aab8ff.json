@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "august-monument-454521-p9",
+  "private_key_id": "fb1a43aab8ffa62043583823cf2ac5bd46ece0e6",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDErJRSmIy3ky2O\nTdSO070BwgNeGqdrg0LNelD0Eo3t2FlowMZ1dfSJ7CaE6pYbXBBHQ5m15Qr0c/wf\no1ujhCLW+6/oKsXZhXg09f124u0bGeLaHnxv4rvFPa+mMLKWp7s5GtR5aHKawoRn\ngBugvaIsSxkytczfiSLK+s6JZogldSFlpl+0KU6xkMY6JzPOkKcgQ9zdyOWr0NAd\nQ+XCv+G8BH+ufh7ATxM4MZmKyZ6ArnlnDqnPbo/abO/PaIiJU7Oa8niKa7m3v9vq\nhq0gJx5YlDgCV6wkviiDAtykARulfa5FCSB1Csv+7Q4iJ2SyAc9nxGT8Da4lbzG8\naFbjum2HAgMBAAECggEAAIqrI+kYph7JJtWvCq+pmxoiMT2ojWLAqdk25N0yN9/7\nKw8w3Lz07fZRCtesjym7P77/auFVHOQ+4wVrqLEh+W6bBuwrPFSiRp8Q0iWA2qzB\nE7G2zQYWV046sB39N+4BVYBt6mGvwx5bB//x04kCK9YPHTUj+c+iYWW8cONv546A\nSwzyvI+fdKPuSTKEd4L5vpJ7strzFtDg/QDuPKsgDlV2Sks5X4FjCWHhgzHtFq8G\nEtluPFsy1gdkDAz3hg2bLYiwqq2O6p/eGVKSw4Nai3vTlY1e4ccaA+qdGMB9qBNP\nDD5isoe7fYVufOUJpa+1Mja/2vjN8ZlJ4PhRXLUTOQKBgQDlbMAzt2Tp93VZ3lK5\nAxO/kTKZNY0hTv1j3kPv0L7iVMzLtp+jWeHV6EF+GnqPHFJnkdRFpUXxW4Fbn6EF\nabLRxHRu0yq89od5zVWPFOM+m7t5lMwb9R6/cgoQtO1Fw03MoRJ5sV6eQXYyHnoq\nd/6TEU2+n5dMUSCCHAKHpJFdzwKBgQDbdKgRvG9F3E6WBCzjtOCHwc2C//TuiNaJ\nfM9l2WEfX2Qz9bipKzMHvq5OY6GgnDj08Ctg69jsLcGhvkwEKKnF+44QSQSTiuww\nNFlqgjv9wJMm1/r95HoelLByEEhxF2v7zeW3MbBnh64o2ReKCrSwCfQR1jVCw6rn\n/bm579NayQKBgBMqkagAYzLUlH4sf5arNiQj2ilIewDUW4DTWbOYKco4sV83Y4C/\nConXPFlvltuLzyqN2UD0PLKcJWNlI4uTN/gkRGHZzFE6+zhmugYZBZ7+XZwbnS2c\nvbPasBKTOttAJKi6sBNwiOoJp/kp6KTRn3fj0y3goUAj6uZTtrZkPiyrAoGBAJFc\nmh71Y/cwUFWJ+nnxy2/g7VHCXOjLdt+m7nGWJYD0XJkWP/S+CpUstqRx1hNep1OG\n6hTO4+a9AC80r4FptdrQH2+mDgP01zGu2zNzhG02a8Ik+bnG5yTudFl5c6KFUx99\naJWJskFBXBjug2sKYFjinupZqvnIRaJZK/Z/Zs4RAoGBAI79OhkfQfM6Ew9oz0Gx\nJ5U0o9qYM1ANobzJAATnVVKM/ilNJCwuLHojIDiAPIbmZcAKk32DrR2X8n4I67ZM\nnaS9Rzcumg1gmDfpUBpMqSs6YdUCJQYsxuPtLYR2OAmc6Mj2Yc6BZWouIuE63Pg+\n4BanXlGjdDCv6SnmfKPdraqW\n-----END PRIVATE KEY-----\n",
+  "client_email": "bisonbytes2025@august-monument-454521-p9.iam.gserviceaccount.com",
+  "client_id": "107811137149945290893",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/bisonbytes2025%40august-monument-454521-p9.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
